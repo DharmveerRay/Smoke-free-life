@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smoke-Free Life</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #d9534f;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .result {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #333;
+        }
+        .progress-container {
+            margin-top: 20px;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 5px;
+        }
+        .progress {
+            height: 20px;
+            width: 0%;
+            background-color: #28a745;
+            text-align: center;
+            color: white;
+            line-height: 20px;
+            border-radius: 5px;
+        }
+        .quote {
+            margin-top: 20px;
+            font-style: italic;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Smoke-Free Life 🚭</h1>
+        <p>Track your smoking habits and see how much you can save!</p>
+        <label>How many cigarettes do you smoke daily?</label>
+        <input type="number" id="cigarettes" placeholder="Enter number" min="0">
+        <label>Price per cigarette (in ₹)</label>
+        <input type="number" id="price" placeholder="Enter price per cigarette" min="0">
+        <button onclick="calculateImpact()">Calculate</button>
+        <div class="result" id="result"></div>
+        
+        <div class="progress-container">
+            <p>Reduction Progress:</p>
+            <div class="progress-bar">
+                <div class="progress" id="progress-bar">0%</div>
+            </div>
+        </div>
+        
+        <div class="quote" id="quote"></div>
+    </div>
+
+    <script>
+        const quotes = [
+            "Every cigarette you don't smoke is a step towards a healthier life.",
+            "You don’t need a cigarette to be happy, but you need health to enjoy happiness.",
+            "Your lungs are precious. Take care of them.",
+            "Small steps lead to big changes. Reduce one cigarette today!"
+        ];
+        
+        function calculateImpact() {
+            let cigarettes = parseInt(document.getElementById('cigarettes').value);
+            let price = parseFloat(document.getElementById('price').value);
+            
+            if (isNaN(cigarettes) || isNaN(price) || cigarettes < 0 || price < 0) {
+                alert("Please enter valid numbers!");
+                return;
+            }
+            
+            let yearlyCost = cigarettes * price * 365;
+            let healthImpact = cigarettes * 11; // Avg. 11 minutes of life lost per cigarette
+            
+            let message = `
+                🚬 You smoke <b>${cigarettes}</b> cigarettes daily.<br>
+                💰 You spend around <b>₹${yearlyCost.toLocaleString()}</b> per year on smoking.<br>
+                ⏳ Smoking reduces your lifespan by <b>${healthImpact} minutes daily</b> (<b>${(healthImpact/60).toFixed(2)} hours</b>).<br><br>
+                <b>Try reducing by just 1 cigarette daily to save ₹${(price * 365).toFixed(2)} yearly!</b>
+            `;
+            
+            document.getElementById('result').innerHTML = message;
+            updateProgress(cigarettes);
+            showMotivationalQuote();
+        }
+        
+        function updateProgress(cigarettes) {
+            let maxCigarettes = 20; // Assume 20 as a high smoking rate
+            let progress = Math.max(0, (1 - cigarettes / maxCigarettes) * 100);
+            document.getElementById('progress-bar').style.width = progress + "%";
+            document.getElementById('progress-bar').innerText = Math.round(progress) + "%";
+        }
+        
+        function showMotivationalQuote() {
+            let randomIndex = Math.floor(Math.random() * quotes.length);
+            document.getElementById('quote').innerText = quotes[randomIndex];
+        }
+    </script>
+</body>
+</html>
